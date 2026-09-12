@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Creative photography by YNG Archive." />
+  <title>Creative — YNG Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-main.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="page-shell">
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="logo-mark" role="img" aria-label="YNG Archive"></span></a>
+
+  <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero gallery-hero">
+    <a class="back-link" href="gallery.html">← All galleries</a>
+    <p class="eyebrow">Gallery folder</p>
+    <h1>Creative</h1>
+    <p>Editorial shoots, artwork, concepts and experimental projects.</p>
+  </section>
+
+  <section class="work section-pad">
+    <div class="photo-grid">
+      
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Double Exposure Series" data-venue="Studio experiment" data-date="Nov 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 1" loading="lazy">
+          </button>
+          <figcaption><span>Double Exposure Series</span><span>01</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Neon & Rain" data-venue="Ballarat CBD, night shoot" data-date="Sep 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 2" loading="lazy">
+          </button>
+          <figcaption><span>Neon & Rain</span><span>02</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Still Life: Analog" data-venue="Home studio, 35mm film" data-date="Jul 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 3" loading="lazy">
+          </button>
+          <figcaption><span>Still Life: Analog</span><span>03</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Concept — Static" data-venue="Collaboration with local stylist" data-date="May 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 4" loading="lazy">
+          </button>
+          <figcaption><span>Concept — Static</span><span>04</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Long Exposure Nights" data-venue="Lake Wendouree" data-date="Mar 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 5" loading="lazy">
+          </button>
+          <figcaption><span>Long Exposure Nights</span><span>05</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Textures & Fragments" data-venue="Found objects, studio" data-date="Jan 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Creative photograph 6" loading="lazy">
+          </button>
+          <figcaption><span>Textures & Fragments</span><span>06</span></figcaption>
+        </figure>
+        
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="brand" href="index.html"><span class="logo-mark" role="img" aria-label="YNG Archive"></span></a>
+  <p>© <span class="year"></span> Trent Young</p>
+</footer>
+</div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+  <div class="lightbox-panel">
+    <button type="button" class="lightbox-close" aria-label="Close album">&times;</button>
+    <div class="lightbox-header">
+      <h2 class="lightbox-title" id="lightbox-title"></h2>
+      <p class="lightbox-meta"></p>
+    </div>
+    <div class="lightbox-grid"></div>
+  </div>
+</div>
+
+<div class="image-viewer" id="image-viewer" role="dialog" aria-modal="true" aria-label="Full size photo">
+  <button type="button" class="viewer-close" aria-label="Back to album">&times;</button>
+  <button type="button" class="viewer-nav viewer-prev" aria-label="Previous photo">&larr;</button>
+  <img class="viewer-image" src="" alt="">
+  <button type="button" class="viewer-nav viewer-next" aria-label="Next photo">&rarr;</button>
+</div>
+
+<script src="script.js"></script>
+</body></html>

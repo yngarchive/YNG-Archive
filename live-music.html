@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live Music photography by YNG Archive." />
+  <title>Live Music — YNG Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-main.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="page-shell">
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="logo-mark" role="img" aria-label="YNG Archive"></span></a>
+
+  <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero gallery-hero">
+    <a class="back-link" href="gallery.html">← All galleries</a>
+    <p class="eyebrow">Gallery folder</p>
+    <h1>Live Music</h1>
+    <p>Artists, bands, venues and the energy around the stage.</p>
+  </section>
+
+  <section class="work section-pad">
+    <div class="photo-grid">
+      
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Basement Static" data-venue="The Hollow Room" data-date="Nov 14, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 1" loading="lazy">
+          </button>
+          <figcaption><span>Basement Static</span><span>01</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Floor Show" data-venue="Warehouse 12" data-date="Sep 21, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 2" loading="lazy">
+          </button>
+          <figcaption><span>Floor Show</span><span>02</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Feedback Loop" data-venue="The Amber Room" data-date="Jul 3, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 3" loading="lazy">
+          </button>
+          <figcaption><span>Feedback Loop</span><span>03</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Sold Out Tuesday" data-venue="Union Hall" data-date="May 9, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 4" loading="lazy">
+          </button>
+          <figcaption><span>Sold Out Tuesday</span><span>04</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Three Band Bill" data-venue="Backroom at Delia's" data-date="Mar 22, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 5" loading="lazy">
+          </button>
+          <figcaption><span>Three Band Bill</span><span>05</span></figcaption>
+        </figure>
+        
+
+        <figure class="gallery-item">
+          <button type="button" class="gallery-trigger" data-band="Encore, No Encore" data-venue="The Hollow Room" data-date="Jan 18, 2025" data-photos="[&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;,&quot;assets/logo-alt.svg&quot;]">
+            <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="Live Music photograph 6" loading="lazy">
+          </button>
+          <figcaption><span>Encore, No Encore</span><span>06</span></figcaption>
+        </figure>
+        
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="brand" href="index.html"><span class="logo-mark" role="img" aria-label="YNG Archive"></span></a>
+  <p>© <span class="year"></span> Trent Young</p>
+</footer>
+</div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+  <div class="lightbox-panel">
+    <button type="button" class="lightbox-close" aria-label="Close album">&times;</button>
+    <div class="lightbox-header">
+      <h2 class="lightbox-title" id="lightbox-title"></h2>
+      <p class="lightbox-meta"></p>
+    </div>
+    <div class="lightbox-grid"></div>
+  </div>
+</div>
+
+<div class="image-viewer" id="image-viewer" role="dialog" aria-modal="true" aria-label="Full size photo">
+  <button type="button" class="viewer-close" aria-label="Back to album">&times;</button>
+  <button type="button" class="viewer-nav viewer-prev" aria-label="Previous photo">&larr;</button>
+  <img class="viewer-image" src="" alt="">
+  <button type="button" class="viewer-nav viewer-next" aria-label="Next photo">&rarr;</button>
+</div>
+
+<script src="script.js"></script>
+</body></html>
