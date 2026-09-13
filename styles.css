@@ -222,8 +222,8 @@ a { color: inherit; text-decoration: none; }
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,.15) 55%, rgba(0,0,0,.25));
 }
-.photo-hero > .eyebrow, .photo-hero > h1, .photo-hero > p:last-child { position: relative; z-index: 2; }
-.photo-hero > p:last-child { color: rgba(242,240,235,.82); }
+.photo-hero > .back-link, .photo-hero > .eyebrow, .photo-hero > h1, .photo-hero > p { position: relative; z-index: 2; }
+.photo-hero > p { color: rgba(242,240,235,.82); }
 .back-link { color: var(--muted); margin-bottom: 3rem; font-size: .85rem; }
 
 

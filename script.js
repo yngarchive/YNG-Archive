@@ -248,10 +248,7 @@ async function loadGallery(mount) {
       const caption = document.createElement("figcaption");
       const titleSpan = document.createElement("span");
       titleSpan.textContent = item.title;
-      const numSpan = document.createElement("span");
-      numSpan.textContent = String(i + 1).padStart(2, "0");
       caption.appendChild(titleSpan);
-      caption.appendChild(numSpan);
       figure.appendChild(caption);
 
       button.addEventListener("click", () => openAlbum(item.title, photos));
