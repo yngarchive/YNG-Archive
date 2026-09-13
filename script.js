@@ -3,7 +3,7 @@
 // Once your R2 bucket is set up with public access (or a custom domain),
 // paste its public base URL here, ending in a trailing slash.
 // e.g. "https://pub-xxxxxxxx.r2.dev/" or "https://photos.yngarchive.com/"
-const CDN_BASE_URL = "https://REPLACE-WITH-YOUR-R2-PUBLIC-URL/";
+const CDN_BASE_URL = "https://pub-ce6d23df189d423d955605600245ecb3.r2.dev/";
 
 // Turns a plain filename/path into a full CDN url. Leaves local site
 // assets (assets/...), full URLs, and data URIs untouched.
@@ -128,57 +128,34 @@ if (viewer) {
   });
 }
 
-// ---------- Direct photo galleries (Portraits, Creative) ----------
-// Every photo on the page is treated as one browsable set — clicking any
-// one opens it full-size, with prev/next cycling through the rest.
-const photoTriggers = document.querySelectorAll(".photo-trigger");
-if (photoTriggers.length && viewer) {
-  const fullPhotos = Array.from(photoTriggers).map(trigger => {
-    const full = trigger.dataset.fullSrc || trigger.querySelector("img").src;
-    return resolveImage(full);
-  });
-
-  photoTriggers.forEach((trigger, i) => {
-    trigger.addEventListener("click", () => {
-      const altText = trigger.querySelector("img").alt || "";
-      openViewer(fullPhotos, i, altText);
-    });
-  });
-}
-
 // ---------- Album lightbox (Live Music, Events) ----------
-// Opens over a blurred backdrop when a gallery photo is clicked, showing
-// that album's photos; clicking a thumbnail opens it full-size.
-const galleryTriggers = document.querySelectorAll(".gallery-trigger");
+// Opens over a blurred backdrop showing an album's photos; clicking a
+// thumbnail inside opens it full-size via the shared viewer above.
 const lightbox = document.getElementById("lightbox");
+let openAlbum = () => {};
+let closeAlbum = () => {};
 
-if (galleryTriggers.length && lightbox && pageShell) {
+if (lightbox && pageShell) {
   const titleEl = lightbox.querySelector(".lightbox-title");
   const metaEl = lightbox.querySelector(".lightbox-meta");
   const gridEl = lightbox.querySelector(".lightbox-grid");
   const closeBtn = lightbox.querySelector(".lightbox-close");
   let lastFocused = null;
-  let albumPhotos = [];
 
-  function openAlbum(trigger) {
-    const band = trigger.dataset.band || "";
-    const venue = trigger.dataset.venue || "";
-    const date = trigger.dataset.date || "";
-    try { albumPhotos = JSON.parse(trigger.dataset.photos || "[]").map(resolveImage); } catch (e) { albumPhotos = []; }
-
-    titleEl.textContent = band;
-    metaEl.textContent = [venue, date].filter(Boolean).join(" — ");
+  openAlbum = (title, photos) => {
+    titleEl.textContent = title;
+    metaEl.textContent = `${photos.length} photo${photos.length !== 1 ? "s" : ""}`;
     gridEl.innerHTML = "";
-    albumPhotos.forEach((src, i) => {
+    photos.forEach((src, i) => {
       const thumb = document.createElement("button");
       thumb.type = "button";
       thumb.className = "lightbox-thumb";
       thumb.setAttribute("aria-label", `View photo ${i + 1} full size`);
       const img = document.createElement("img");
       img.src = src;
-      img.alt = band;
+      img.alt = title;
       thumb.appendChild(img);
-      thumb.addEventListener("click", () => openViewer(albumPhotos, i, band));
+      thumb.addEventListener("click", () => openViewer(photos, i, title));
       gridEl.appendChild(thumb);
     });
 
@@ -187,19 +164,15 @@ if (galleryTriggers.length && lightbox && pageShell) {
     pageShell.classList.add("blurred");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
-  }
+  };
 
-  function closeAlbum() {
+  closeAlbum = () => {
     closeViewer();
     lightbox.classList.remove("open");
     pageShell.classList.remove("blurred");
     document.body.style.overflow = "";
     if (lastFocused) lastFocused.focus();
-  }
-
-  galleryTriggers.forEach(trigger => {
-    trigger.addEventListener("click", () => openAlbum(trigger));
-  });
+  };
 
   closeBtn.addEventListener("click", closeAlbum);
   lightbox.addEventListener("click", e => {
@@ -211,4 +184,103 @@ if (galleryTriggers.length && lightbox && pageShell) {
       if (e.key === "Escape" && lightbox.classList.contains("open")) closeAlbum();
     }
   });
+}
+
+// ---------- Dynamic gallery loading (Live Music, Events, Portraits, Creative) ----------
+// Reads whatever is actually in the R2 bucket via the gallery worker, so
+// adding photos to the bucket is the only step needed to update the site
+// — no code edits, ever.
+//
+// Once your worker is deployed, paste its URL here (see README.md).
+const GALLERY_WORKER_URL = "https://yng-archive-gallery.trent-7f0.workers.dev";
+
+const galleryMount = document.getElementById("gallery-mount");
+
+if (galleryMount) {
+  loadGallery(galleryMount);
+}
+
+async function loadGallery(mount) {
+  const category = mount.dataset.category;
+  const showCaptions = mount.dataset.captions === "true";
+  const isAlbumStyle = !!lightbox;
+
+  mount.innerHTML = '<p class="gallery-status">Loading photos\u2026</p>';
+
+  let data;
+  try {
+    const res = await fetch(`${GALLERY_WORKER_URL}?category=${category}`);
+    if (!res.ok) throw new Error("Bad response");
+    data = await res.json();
+  } catch (err) {
+    mount.innerHTML = '<p class="gallery-status">Couldn\'t load photos right now \u2014 check back shortly.</p>';
+    return;
+  }
+
+  const items = data.items || [];
+  if (!items.length) {
+    mount.innerHTML = '<p class="gallery-status">No photos here yet \u2014 check back soon.</p>';
+    return;
+  }
+
+  mount.innerHTML = "";
+
+  if (isAlbumStyle) {
+    items.forEach((item, i) => {
+      const photos = item.photos.map(resolveImage);
+
+      const figure = document.createElement("figure");
+      figure.className = "gallery-item";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "gallery-trigger";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = item.title;
+      img.src = photos[0];
+      button.appendChild(img);
+      figure.appendChild(button);
+
+      const caption = document.createElement("figcaption");
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = item.title;
+      const numSpan = document.createElement("span");
+      numSpan.textContent = String(i + 1).padStart(2, "0");
+      caption.appendChild(titleSpan);
+      caption.appendChild(numSpan);
+      figure.appendChild(caption);
+
+      button.addEventListener("click", () => openAlbum(item.title, photos));
+      mount.appendChild(figure);
+    });
+  } else {
+    const allPhotos = items.map(item => resolveImage(item.photos[0]));
+    items.forEach((item, i) => {
+      const figure = document.createElement("figure");
+      figure.className = "gallery-item";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "photo-trigger";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = item.title;
+      img.src = allPhotos[i];
+      button.appendChild(img);
+      figure.appendChild(button);
+
+      if (showCaptions) {
+        const caption = document.createElement("figcaption");
+        caption.className = "photo-caption";
+        caption.textContent = item.title;
+        figure.appendChild(caption);
+      }
+
+      button.addEventListener("click", () => openViewer(allPhotos, i, item.title));
+      mount.appendChild(figure);
+    });
+  }
 }

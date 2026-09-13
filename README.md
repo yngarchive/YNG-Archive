@@ -13,45 +13,68 @@ This version includes:
 
 Double-click `index.html`.
 
-## Replacing sample photos
+## How the galleries work
 
-Photos are hosted separately on Cloudflare R2 (not stored in this repo), so the site stays small on GitHub no matter how many photos you add. See "Connecting Cloudflare R2" below to set that up — once it's done, adding a photo is just filling in one attribute.
+The Live Music, Events, Portraits, and Creative pages load their photos **automatically** from your Cloudflare R2 bucket — you don't edit any HTML to add new photos. Upload a photo to the bucket, refresh the site, it's there.
 
-Every placeholder photo in the HTML looks like this:
+This is powered by a small Cloudflare Worker (`cloudflare-worker/gallery-worker.js`) that reads your bucket's folder contents and hands the list to the site. See "Connecting the gallery worker" below — it's a one-time setup.
 
-    <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="...">
+### Folder convention inside the bucket
 
-To swap in a real photo, upload it to your R2 bucket, then fill in `data-cdn-src` with its path inside the bucket:
+- **Portraits and Creative** (single photos): just drop files straight into the folder.
 
-    <img class="placeholder-photo" data-cdn-src="live-music/show-01.jpg" src="assets/logo-alt.svg" alt="...">
+      portraits/some-photo.jpg
+      creative/double-exposure.jpg
 
-The site's script automatically swaps the placeholder for the real photo and removes the placeholder styling — you don't need to touch `src` or remove any classes yourself.
+  The filename (cleaned up) becomes the caption on Creative. Portraits has no caption.
 
-For the Live Music album lightbox specifically, each `<button class="gallery-trigger">` has a `data-photos` attribute listing that album's photos. Replace the placeholder entries with real R2 paths the same way:
+- **Live Music and Events** (albums/shows): put each show in its own subfolder.
 
-    data-photos='["live-music/basement-static-01.jpg","live-music/basement-static-02.jpg"]'
+      live-music/2025-11-14_The-Hollow-Room_Basement-Static/01.jpg
+      live-music/2025-11-14_The-Hollow-Room_Basement-Static/02.jpg
+
+  The subfolder name becomes the album title shown on the site. Segments split on `_`, dashes become spaces — so the folder above displays as "2025 11 14 — The Hollow Room — Basement Static". Name folders however reads best to you; this is just the default the worker uses.
+
+- **Sort order** is alphabetical/numeric by filename or folder name. Prefix filenames with numbers (`01.jpg`, `02.jpg`) or folders with dates (`YYYY-MM-DD_...`) to control the order things appear in.
+
+- Supported file types: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`.
 
 ## Connecting Cloudflare R2
 
 1. Create an R2 bucket in your Cloudflare dashboard.
-2. Enable public access on the bucket (either the free `r2.dev` subdomain, or a custom domain like `photos.yngarchive.com`).
-3. Upload your photos into the bucket — folders like `live-music/`, `events/`, `portraits/`, `creative/` keep things organized, matching the site's gallery names.
+2. Enable public access on the bucket (the free `r2.dev` subdomain is fine to start; a custom domain like `photos.yngarchive.com` is better for a live production site — see Cloudflare's docs on custom domains for R2).
+3. Upload your photos following the folder convention above.
 4. Open `script.js` and set `CDN_BASE_URL` near the top to your bucket's public URL, ending in a slash:
 
        const CDN_BASE_URL = "https://pub-xxxxxxxx.r2.dev/";
 
-5. From then on, every `data-cdn-src` and `data-photos` path is just the filename/folder inside the bucket — the site builds the full URL for you.
+## Connecting the gallery worker
 
-Local image folders (`images/live-music`, etc.) are still here if you'd rather host a few photos directly in the repo instead — just point `src` at those instead of using `data-cdn-src`.
+This is the one manual step that makes the galleries load automatically. Takes about 5 minutes, once.
 
-## Adding more gallery folders
+1. In the Cloudflare dashboard, go to **Workers & Pages** > **Create** > **Create Worker**.
+2. Give it a name (e.g. `yng-archive-gallery`) and deploy the default template.
+3. Click **Edit code**, delete everything in the editor, and paste in the full contents of `cloudflare-worker/gallery-worker.js` from this folder.
+4. Click **Deploy** (or Save and Deploy).
+5. Go to the Worker's **Settings** > **Bindings** > **Add binding** > **R2 Bucket**. Set the variable name to exactly `PHOTOS`, and select your photo bucket. Save.
+6. Copy the Worker's URL — it'll look like `https://yng-archive-gallery.<your-subdomain>.workers.dev`.
+7. Open `script.js`, find `GALLERY_WORKER_URL` near the bottom, and paste your Worker's URL in (no trailing slash needed).
 
-1. Duplicate one of the gallery pages, such as `portraits.html`.
-2. Rename it, for example `street.html`.
-3. Change the page title and heading.
-4. Add a new folder inside `images`.
-5. Add a new folder card to `gallery.html`.
-6. Optionally add it to the homepage folder grid.
+That's it. From now on, adding a photo to the bucket is the only step needed — the site picks it up on the next page load, no code changes.
+
+### If a gallery page looks empty or shows an error
+
+- Double-check the R2 binding variable name is exactly `PHOTOS` (case-sensitive) — the worker code expects that name specifically.
+- Make sure photos are inside a folder matching the page (`live-music/`, `events/`, `portraits/`, `creative/`).
+- Check `GALLERY_WORKER_URL` in `script.js` doesn't have a trailing slash and matches your Worker's actual URL exactly.
+
+## Other static photo spots
+
+A few spots on the site are still simple, one-off placeholders rather than dynamic galleries — the small preview photo on each gallery "folder card" (on the Home and Gallery pages), and the About page portrait. These use:
+
+    <img class="placeholder-photo" data-cdn-src="" src="assets/logo-alt.svg" alt="...">
+
+Fill in `data-cdn-src` with a path inside your R2 bucket (or point `src` at a local file in `images/`) and the site swaps it in automatically.
 
 ## Before publishing
 
@@ -60,7 +83,6 @@ Change:
 - `trent@yngarchive.com`
 - The Instagram and Facebook links
 - Sample text
-- Sample photos
 
 ## Free hosting
 

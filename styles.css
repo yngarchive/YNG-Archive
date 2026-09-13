@@ -252,6 +252,7 @@ img.placeholder-photo {
 
 .photo-grid.natural-ratio .gallery-item img { aspect-ratio: auto; }
 .photo-caption { display: block; margin-top: .9rem; color: var(--muted); font-size: .85rem; letter-spacing: .02em; text-transform: none; }
+.gallery-status { padding: 5rem 0; text-align: center; color: var(--muted); font-size: 1.05rem; }
 
 .lightbox {
   display: none;
