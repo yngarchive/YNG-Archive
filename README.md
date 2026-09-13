@@ -39,6 +39,10 @@ This is powered by a small Cloudflare Worker (`cloudflare-worker/gallery-worker.
 
 - Supported file types: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`.
 
+### Fixing a bad crop on a specific photo
+
+Live Music and Events album covers (and Live Music/Events grid thumbnails generally) are cropped to a fixed box, which can occasionally cut off something important in a photo. If that happens, rename the file to end in `_top`, `_bottom`, `_left`, or `_right` (before the extension) to tell the site which edge to crop from instead of the default center — e.g. `01.jpg` → `01_top.jpg` crops from the top down instead of the middle out. Re-upload with the new name (R2 has no rename, so this means delete-and-reupload, same as any other R2 file change).
+
 ## Connecting Cloudflare R2
 
 1. Create an R2 bucket in your Cloudflare dashboard.

@@ -240,6 +240,7 @@ async function loadGallery(mount) {
       img.loading = "lazy";
       img.alt = item.title;
       img.src = photos[0];
+      img.style.objectPosition = cropHintFor(item.photos[0]);
       button.appendChild(img);
       figure.appendChild(button);
 
@@ -283,4 +284,18 @@ async function loadGallery(mount) {
       mount.appendChild(figure);
     });
   }
+}
+
+// Lets you control how a grid cover photo gets cropped by adding a suffix
+// to the filename, since the site can't otherwise know what's important
+// in any given photo. Works on the last filename segment before the
+// extension: photo_top.jpg, photo_bottom.jpg, photo_left.jpg,
+// photo_right.jpg. No suffix (or an unrecognized one) crops from the
+// center, same as before.
+function cropHintFor(key) {
+  const filename = key.split("/").pop() || "";
+  const stem = filename.replace(/\.[^.]+$/, "");
+  const match = stem.match(/_(top|bottom|left|right)$/i);
+  const positions = { top: "center top", bottom: "center bottom", left: "left center", right: "right center" };
+  return match ? positions[match[1].toLowerCase()] : "center";
 }
