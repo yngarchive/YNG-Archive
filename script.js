@@ -239,8 +239,9 @@ async function loadGallery(mount) {
       const img = document.createElement("img");
       img.loading = "lazy";
       img.alt = item.title;
-      img.src = photos[0];
       img.style.objectPosition = cropHintFor(item.photos[0]);
+      markIfUltraWide(img, figure);
+      img.src = photos[0];
       button.appendChild(img);
       figure.appendChild(button);
 
@@ -269,6 +270,7 @@ async function loadGallery(mount) {
       const img = document.createElement("img");
       img.loading = "lazy";
       img.alt = item.title;
+      markIfUltraWide(img, figure);
       img.src = allPhotos[i];
       button.appendChild(img);
       figure.appendChild(button);
@@ -298,4 +300,18 @@ function cropHintFor(key) {
   const match = stem.match(/_(top|bottom|left|right)$/i);
   const positions = { top: "center top", bottom: "center bottom", left: "left center", right: "right center" };
   return match ? positions[match[1].toLowerCase()] : "center";
+}
+
+// Lets a genuinely panoramic/ultra-wide photo break out of the masonry
+// grid and span the full row instead of being squeezed into one column.
+// Checked once the image actually loads, since that's the only point the
+// real aspect ratio is known.
+const ULTRA_WIDE_RATIO = 2.2;
+
+function markIfUltraWide(img, figure) {
+  img.addEventListener("load", () => {
+    if (img.naturalWidth / img.naturalHeight >= ULTRA_WIDE_RATIO) {
+      figure.classList.add("featured-wide");
+    }
+  });
 }
